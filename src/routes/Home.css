@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+}
+  
+/* Nav Bar*/
+#nav-bar {
+height: 10vh;
+background: black;
+color: white;
+display: flex;
+justify-content: space-between;
+}
+
+#nav-bar > div {
+width: 25vw;
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+}

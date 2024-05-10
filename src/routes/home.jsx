@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
+import NavBar from "../components/NavBar";
+import "./Home.css"
 
 export default function Home() {
     const source = axios.CancelToken.source();
@@ -12,7 +14,17 @@ export default function Home() {
     }, []);
         
     
-    return (<h1>
-            dick and balls
-        </h1>);
+    return (
+        <>
+            <NavBar />
+            <div id="welcome">
+                <h1>
+                    Welcome! Please log in to game!
+                </h1>
+            </div>
+            <div id="buttons">
+                <button>Log in!</button>
+                <button>Sign up!</button>
+            </div>
+        </>);
 }
