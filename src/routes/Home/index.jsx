@@ -41,13 +41,12 @@ function SignUpDialog(props) {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
       <DialogTitle>Sign Up</DialogTitle>
-      <form onSubmit={register}>
-        <TextField name="email" placeholder="Email" type="email" autoFocus required value={email} onChange={updateEmail} />
-        <TextField name="username" placeholder="Username" required value={username} onChange={updateUsername} />
-        <TextField name="password" placeholder="Password" type="password" required value={password} onChange={updatePassword} />
-        <TextField name="confirmedPassword" placeholder="Confirm Password" type="password" required value={confirmPassword} onChange={updateConfirmPassword} />
-        <Button onClick={register}>Register</Button>
-      </form>
+      <TextField name="email" placeholder="Email" type="email" autoFocus value={email} onChange={updateEmail} />
+      <TextField name="username" placeholder="Username" value={username} onChange={updateUsername} />
+      <TextField name="password" placeholder="Password" type="password" value={password} onChange={updatePassword} />
+      <TextField name="confirmedPassword" placeholder="Confirm Password" type="password" value={confirmPassword} onChange={updateConfirmPassword} />
+      <Button onClick={register}>Register</Button>
+      
     </Dialog>
   )
 }

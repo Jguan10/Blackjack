@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export default app.post("/", async (req, res) => {
   // Validation
   const body = res.req.body;
-  if (!body.email || !body.name || !body.password) {
+  if (!body.email || !body.username || !body.password) {
     res.json("Fields are empty...");
     return;
   }

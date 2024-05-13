@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 
 io.on("connection",  () => {
-    console.log("someon connected")
+    console.log("someone connected")
 })
 
 httpServer.listen(3000);
