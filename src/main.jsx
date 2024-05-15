@@ -13,6 +13,10 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/join",
+        element: <div>Coming Soon</div>
+      },
+      {
         path: "*",
         element: <PageNotFound />
       },
