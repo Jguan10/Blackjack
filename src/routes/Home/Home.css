@@ -1,7 +1,12 @@
 body {
     margin: 0;
 }
-  
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
 /* Nav Bar*/
 #nav-bar {
     height: 10vh;
@@ -16,4 +21,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+}
+
+#welcome {
+    text-align: center;
 }

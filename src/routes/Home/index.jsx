@@ -1,8 +1,10 @@
-import {useEffect, useMemo, useState} from "react";
+import { useState} from "react";
 import "./Home.css"
-import SocketConnection from "../../socket.js";
-import {Alert, Button, Dialog, DialogTitle, FormControl, Snackbar, TextField} from "@mui/material";
+import { Button, Dialog, DialogTitle, Grid, Snackbar, TextField} from "@mui/material";
 import PropTypes from "prop-types";
+import {useDispatch, useSelector} from "react-redux";
+import { loggedIn, signedOut } from "../../store/loggedIn.js";
+import {Link} from "react-router-dom";
 
 function SignUpDialog(props) {
   const [openSnackbar, setSnackbar] = useState(false);
@@ -17,8 +19,6 @@ function SignUpDialog(props) {
     setSnackbar(false);
   }
   function updateEmail(e) {
-    if (e.target.validity.valid) {
-    }
     setEmail(e.target.value)
   }
   function updateUsername(e) {
@@ -42,7 +42,6 @@ function SignUpDialog(props) {
       setSnackbar(true);
       return;
     }
-
     await fetch("http://localhost:3000/signup", {
       method: "POST",
       headers: {
@@ -86,41 +85,119 @@ SignUpDialog.propTypes = {
   open: PropTypes.bool.isRequired,
 }
 
-export default function Home() {
-  const [open, setOpen] = useState(false);
+function LoginDialog(props) {
+  const [openSnackbar, setSnackbar] = useState(false);
+  const [loginStatus, setLoginStatus] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
-  function closeSignupDialog() {
-    setOpen(false);
+  function closeSnackbar() {
+    setSnackbar(false);
   }
-  function openSignUpDialog() {
-    setOpen(true);
+  function updateEmail(e) {
+    setEmail(e.target.value)
+  }
+  function updatePassword(e) {
+    setPassword(e.target.value);
+  }
+  async function login() {
+    // Simple form validation
+    if (!email || !password) {
+      setSnackbarMessage("There are empty fields...");
+      setSnackbar(true);
+      return;
+    }
+    await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    }).then(async (res) => {
+      const response = await res.json()
+      setSnackbarMessage(response);
+      if (response === "Logged In!") {
+        dispatch(loggedIn(email, password));
+        props.onClose();
+      }
+    }).catch((err) => {
+      console.log(err);
+    }).finally(() => {
+      setSnackbar(true);
+    });
   }
 
-  const abort = new AbortController();
-  useEffect(() => {
-    const socket = new SocketConnection();
-    fetch("http://localhost:3000/", { signal: abort.signal })
-      .then(async (data) => console.log(await data.json()))
-    return () => {
-        abort.abort("Component deloaded");
-        socket.removeConnectListener();
-    };
-  }, []);
   return (
     <>
+      <Dialog open={props.open} onClose={props.onClose}>
+        <DialogTitle>Login</DialogTitle>
+        <TextField name="email" placeholder="Email" type="email" autoFocus required value={email} onChange={updateEmail} />
+        <TextField name="password" placeholder="Password" type="password" value={password} onChange={updatePassword} />
+        <Button onClick={login}>Login</Button>
+      </Dialog>
+      <Snackbar open={openSnackbar} anchorOrigin={{vertical: "bottom", horizontal: "center"}} onClose={closeSnackbar}
+                message={snackbarMessage} severity={loginStatus} />
+    </>
+  )
+}
+
+LoginDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+}
+
+export default function Home() {
+  const auth = useSelector((state) => state.auth.value);
+  const [signUpOpen, setSignUpOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+
+  function closeSignupDialog() {
+    setSignUpOpen(false);
+  }
+  function openSignUpDialog() {
+    setSignUpOpen(true);
+  }
+  function closeLoginDialog() {
+    setLoginOpen(false);
+  }
+  function openLoginDialog() {
+    setLoginOpen(true);
+  }
+
+  if (!auth)
+    return (
       <div id="welcome">
         <h1>
-            Welcome! Please log in to game!
+          Welcome! Please log in to game!
         </h1>
+        <Grid className="container" container spacing={1}>
+          <Grid item>
+            <Button variant="contained" onClick={openLoginDialog} >Log in!</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={openSignUpDialog}>Sign up!</Button>
+          </Grid>
+        </Grid>
+        <SignUpDialog
+          open={signUpOpen}
+          onClose={closeSignupDialog}
+        />
+        <LoginDialog
+          open={loginOpen}
+          onClose={closeLoginDialog}
+        />
       </div>
-      <div id="buttons">
-        <button>Log in!</button>
-        <button onClick={openSignUpDialog}>Sign up!</button>
-      </div>
-      <SignUpDialog
-        open={open}
-        onClose={closeSignupDialog}
-      />
-    </>
+    );
+  return (
+    <div className="container">
+      <Link to="/play">
+        <Button variant="contained">Play The Game</Button>
+      </Link>
+    </div>
   );
 }
