@@ -40,7 +40,7 @@ function Game(props) {
     if (playerValue + cardValues[card.value] > 21)
       for (const card of playerHand)
         if (card.value === "ACE") {
-          card.value = "A";
+          card.value = "A";  
           setPlayerValue((val) => val - 10);
           break;
         }
@@ -182,7 +182,7 @@ function PlayDialog(props) {
       }
     });
 
-    await fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1").then(async (res) => {
+    await fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6").then(async (res) => {
       const data = await res.json();
       if (!data.success)
         console.log("uh oh");

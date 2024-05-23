@@ -47,10 +47,6 @@ export default function Account() {
             <TableCell>{new Date(created).toString()}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Rooms Joined</TableCell>
-            <TableCell>{roomsJoined}</TableCell>
-          </TableRow>
-          <TableRow>
             <TableCell>Rounds Played</TableCell>
             <TableCell>{roundsPlayed}</TableCell>
           </TableRow>

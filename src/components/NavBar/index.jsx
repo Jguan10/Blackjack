@@ -27,7 +27,7 @@ export default function NavBar() {
       <div id="nav-bar">
         <div id="cgh">
             <Link to="/">
-              <Button variant="contained">CGH</Button>
+              <Button variant="contained">HOME</Button>
             </Link>
         </div>
         <Account />
